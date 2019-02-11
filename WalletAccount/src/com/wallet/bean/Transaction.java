@@ -38,11 +38,15 @@ public class Transaction {
 		if(transType==TransactionType.deposit || transType==TransactionType.withdraw) {
 			return "Transaction Details-----------"+"\n"+"Holder Number:"+senderPhone+"\n"+"Amount:"+balance+"\n"+"Transaction Type:"+transType+"\n";
 		}
-		else
+		else if(transType==TransactionType.fundtransfer_to)
 		{
 			return "Transaction Details-----------" +"\n"+"SenderPhoneNo.:"+ senderPhone +"\n"+ "RecieverPhoneNo.:" + recieverPhone +"\n"+ "Amount:" + balance
-					+"\n"+ "Transaction Type" + transType + "\n";
-			
+					+"\n"+ "Transaction Type:" + transType + "\n";
+		}
+		else
+		{
+			return "Transaction Details-----------" +"\n"+ "RecieverPhoneNo.:" + recieverPhone +"\n"+"SenderPhoneNo.:"+ senderPhone+"\n"+ "Amount:" + balance
+					+"\n"+ "Transaction Type:" + transType + "\n";
 		}
 	}
 	
