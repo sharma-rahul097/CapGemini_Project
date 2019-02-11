@@ -87,27 +87,34 @@ public class WalletService implements IWalletService {
 	public Customer fundTransfer(String senderPhone, String recieverPhone, BigDecimal balance)
 			throws CustomerNotFoundException, InsuffiecientBalanceException {
 		Transaction transaction = new Transaction();
-		Customer cus = new Customer();
-		Wallet wallet = new Wallet();
+		Customer cus1 = new Customer();
+		Customer cus2 = new Customer();
+		Wallet wallet1 = new Wallet();
+		Wallet wallet2 = new Wallet();
 		transaction.setSenderPhone(senderPhone);
-		transaction.setBalance(balance);
-		transaction.setTransType(TransactionType.fundTransfer_from);
-		cus = iw.showByPhone(senderPhone);
-		if (cus.getWallet().getBalance().compareTo(balance) < 0) {
-			throw new InsuffiecientBalanceException();
-		}
-		wallet = cus.getWallet();
-		wallet.setBalance(wallet.getBalance().subtract(balance));
-		iw.saveTransaction(senderPhone, transaction);
-		
 		transaction.setRecieverPhone(recieverPhone);
 		transaction.setBalance(balance);
 		transaction.setTransType(TransactionType.fundtransfer_to);
-		cus = iw.showByPhone(recieverPhone);
-		wallet = cus.getWallet();
-		wallet.setBalance(wallet.getBalance().add(balance));
-		iw.saveTransaction(recieverPhone, transaction);
-		return cus;
+		cus1 = iw.showByPhone(senderPhone);
+		if (cus1.getWallet().getBalance().compareTo(balance) < 0) {
+			throw new InsuffiecientBalanceException();
+		}
+		wallet1 = cus1.getWallet();
+		wallet1.setBalance(wallet1.getBalance().subtract(balance));
+		cus1.setWallet(wallet1);
+		iw.saveTransaction(senderPhone, transaction);
+		
+		Transaction transaction1 = new Transaction();
+		transaction1.setSenderPhone(senderPhone);
+		transaction1.setRecieverPhone(recieverPhone);
+		transaction1.setBalance(balance);
+		transaction1.setTransType(TransactionType.fundTransfer_from);
+		cus2 = iw.showByPhone(recieverPhone);
+		wallet2 = cus2.getWallet();
+		wallet2.setBalance(wallet2.getBalance().add(balance));
+		cus2.setWallet(wallet2);
+		iw.saveTransaction(recieverPhone, transaction1);
+		return cus1;
 	}
 
 	public boolean isValidName(String name) {
